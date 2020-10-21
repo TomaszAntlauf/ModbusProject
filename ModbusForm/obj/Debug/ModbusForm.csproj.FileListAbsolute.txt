@@ -1,0 +1,12 @@
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\bin\Debug\ModbusForm.exe.config
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\bin\Debug\ModbusForm.exe
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\bin\Debug\ModbusForm.pdb
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\bin\Debug\EasyModbus.dll
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csprojAssemblyReference.cache
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.Form1.resources
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.Properties.Resources.resources
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csproj.GenerateResource.cache
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csproj.CoreCompileInputs.cache
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csproj.CopyComplete
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.exe
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.pdb
