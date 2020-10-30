@@ -10,3 +10,4 @@ C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csproj.Co
 C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.csproj.CopyComplete
 C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.exe
 C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.pdb
+C:\Users\tomaa\source\repos\ModbusForm\ModbusForm\obj\Debug\ModbusForm.Form2.resources

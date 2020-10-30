@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.buttonCon = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -55,6 +58,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.functionBox2 = new System.Windows.Forms.ComboBox();
             this.labelStan = new System.Windows.Forms.Label();
+            this.buttonCrt = new System.Windows.Forms.Button();
+            this.chartD = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            ((System.ComponentModel.ISupportInitialize)(this.chartD)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonCon
@@ -302,12 +308,40 @@
             this.labelStan.TabIndex = 29;
             this.labelStan.Text = "Stan: Brak połączenia";
             // 
+            // buttonCrt
+            // 
+            this.buttonCrt.Location = new System.Drawing.Point(1183, 379);
+            this.buttonCrt.Name = "buttonCrt";
+            this.buttonCrt.Size = new System.Drawing.Size(80, 80);
+            this.buttonCrt.TabIndex = 30;
+            this.buttonCrt.Text = "Create Chart";
+            this.buttonCrt.UseVisualStyleBackColor = true;
+            this.buttonCrt.Click += new System.EventHandler(this.buttonCrt_Click);
+            // 
+            // chartD
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chartD.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartD.Legends.Add(legend1);
+            this.chartD.Location = new System.Drawing.Point(796, 9);
+            this.chartD.Name = "chartD";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "values";
+            this.chartD.Series.Add(series1);
+            this.chartD.Size = new System.Drawing.Size(467, 364);
+            this.chartD.TabIndex = 31;
+            this.chartD.Text = "chart1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1134, 808);
+            this.ClientSize = new System.Drawing.Size(1275, 808);
+            this.Controls.Add(this.chartD);
+            this.Controls.Add(this.buttonCrt);
             this.Controls.Add(this.labelStan);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.functionBox2);
@@ -338,6 +372,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            ((System.ComponentModel.ISupportInitialize)(this.chartD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,6 +407,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox functionBox2;
         private System.Windows.Forms.Label labelStan;
+        private System.Windows.Forms.Button buttonCrt;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartD;
     }
 }
 

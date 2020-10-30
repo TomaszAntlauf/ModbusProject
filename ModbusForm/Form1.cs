@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,8 @@ namespace ModbusForm
         private int licznik;
         public ModbusClient modbusClient;
         double x = 1;
-        
 
-
+        public List<ChartData> wynik { get; set; }
 
 
         public Form1()
@@ -62,10 +62,28 @@ namespace ModbusForm
         {
             start = Int32.Parse(addBox1.Text);
             licznik = Int32.Parse(addBox2.Text);
+           // wynik = new List<ChartData>();
+            //ChartData chartDate = new ChartData();
+            
 
             if (functionBox.SelectedItem == "01 Read Coil Status")
             {
                 listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+                //for (int i = 0; i < licznik; i++)
+                //{
+                //    chartDate.IDex = i;
+                //    if (bool.Parse(listBox1.Items[i].ToString()) == false)
+                //    {
+                //        chartDate.Value = 0;
+                //    }
+                //    else if (bool.Parse(listBox1.Items[i].ToString()) == true)
+                //    {
+                //        chartDate.Value = 1;
+                //    }
+
+                //    wynik.Add(chartDate);
+                //}
+
             }
             else if (functionBox.SelectedItem == "02 Read Input Status")
             {
@@ -74,6 +92,12 @@ namespace ModbusForm
             else if (functionBox.SelectedItem == "03 Read Holding Registers")
             {
                 listBox1.DataSource = modbusClient.ReadHoldingRegisters(start, licznik);
+                //for (int i = 0; i < licznik; i++)
+                //{
+                //    chartDate.IDex = i;
+                //    chartDate.Value = int.Parse(listBox1.Items[i].ToString());
+                //    wynik.Add(chartDate);
+                //}
             }
             else if (functionBox.SelectedItem == "04 Read Input Registers")
             {
@@ -83,6 +107,8 @@ namespace ModbusForm
             {
                 listBox1.DataSource = modbusClient.ReadHoldingRegisters(start, licznik);
             }
+
+            
         }
 
         private void buttonDis_Click(object sender, EventArgs e)
@@ -142,7 +168,7 @@ namespace ModbusForm
         private void buttonWExecute_Click(object sender, EventArgs e)
         {
             start = Int32.Parse(addBox3.Text);
-            licznik = Int32.Parse(addBox2.Text);
+            
             
             if (functionBox2.SelectedItem == "05 Write Single Coil")
             {
@@ -218,5 +244,57 @@ namespace ModbusForm
                 modbusClient.WriteMultipleRegisters(start, tab);
             }
         }
+
+        private void buttonCrt_Click(object sender, EventArgs e)
+        {
+            //Form2 child = new Form2();
+            //child.Show();
+            start = Int32.Parse(addBox1.Text);
+            licznik = Int32.Parse(addBox2.Text);
+
+            chartD.Series["values"].Points.Clear();
+
+            //wynik = new List<ChartData>();
+            ChartData chartDate = new ChartData();
+
+            for (int i = start; i < licznik; i++)
+            {
+                chartDate.IDex = i;
+
+                if (bool.TryParse(listBox1.Items[i].ToString(), out bool output))
+                {
+                    if (bool.Parse(listBox1.Items[i].ToString()) == false)
+                    {
+                        chartDate.Value = 0;
+                    }
+                    else if (bool.Parse(listBox1.Items[i].ToString()) == true)
+                    {
+                        chartDate.Value = 1;
+                    }
+                }
+                else
+                {
+                    chartDate.Value = int.Parse(listBox1.Items[i].ToString());
+                }
+
+
+                //wynik.Add(chartDate);
+                chartD.Series["values"].Points.AddXY(chartDate.IDex, chartDate.Value);
+            }
+
+
+            //foreach (ChartData ch in wynik) 
+            //{
+            //    chartD.Series["values"].Points.AddXY(ch.IDex, ch.Value);
+            //}
+
+        }
+    }
+
+    public class ChartData
+    {
+        //public DateTime Day { get; set; }
+        public int IDex { get; set; }
+        public int Value { get; set; }
     }
 }
