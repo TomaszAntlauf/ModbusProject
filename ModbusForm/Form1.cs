@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -21,6 +24,12 @@ namespace ModbusForm
         private int licznik;
         public ModbusClient modbusClient;
         double x = 1;
+        bool offon = false;
+        //private delegate void SafeCallDelegate(bool[] text);
+        private delegate void SafeCallDelegate(object obj);
+        //CancellationTokenSource cts;
+        CancellationTokenSource cts = new CancellationTokenSource();
+
 
         public List<ChartData> wynik { get; set; }
 
@@ -37,23 +46,31 @@ namespace ModbusForm
             functionBox2.Items.Add("06 Write Single Register");
             functionBox2.Items.Add("15 Write Multiple Coils");
             functionBox2.Items.Add("16 Write Multiple Registers");
+            offon = true;
+            
 
         }
 
-        private void buttonCon_Click(object sender, EventArgs e)
+        private async void buttonCon_Click(object sender, EventArgs e)
         {
             ip = ipBox.Text;
             port = Int32.Parse(portBox.Text);
-            
 
-            modbusClient = new ModbusClient(ip, port);    //Ip-Address and Port of Modbus-TCP-Server
-            modbusClient.Connect();
-            if (modbusClient.Connected == true)
+            if (offon == false)
             {
-                labelStan.Text = "Stan: Połączono";
+                await Task.Delay(1000);
+            }
+            else
+            {
+                modbusClient = new ModbusClient(ip, port);    //Ip-Address and Port of Modbus-TCP-Server
+                modbusClient.Connect();
+                if (modbusClient.Connected == true)
+                {
+                    labelStan.Text = "Stan: Połączono";
+                }
+
             }
 
-            
         }
 
         
@@ -62,13 +79,27 @@ namespace ModbusForm
         {
             start = Int32.Parse(addBox1.Text);
             licznik = Int32.Parse(addBox2.Text);
-           // wynik = new List<ChartData>();
+            //bool[] b;
+            //var dict = new ConcurrentDictionary<int, int>();
+            //var task = Task.Factory.StartNew(() => CykliczneOdpytanie(ref dict));
+            //wynik = new List<ChartData>();
             //ChartData chartDate = new ChartData();
-            
+
+
+
 
             if (functionBox.SelectedItem == "01 Read Coil Status")
             {
-                listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
+                ThreadPool.QueueUserWorkItem(new WaitCallback(CoilOdczyt),cts.Token);
+                //Task.Factory.StartNew(() => CoilOdczyt());
+                //Task.Factory.StartNew(() => backgroundWorker1.RunWorkerAsync());
+                //listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+                //backgroundWorker1.RunWorkerAsync();
+                //Thread.Sleep(1000);
+
                 //for (int i = 0; i < licznik; i++)
                 //{
                 //    chartDate.IDex = i;
@@ -87,10 +118,16 @@ namespace ModbusForm
             }
             else if (functionBox.SelectedItem == "02 Read Input Status")
             {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
                 listBox1.DataSource = modbusClient.ReadDiscreteInputs(start, licznik);
             }
             else if (functionBox.SelectedItem == "03 Read Holding Registers")
             {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
                 listBox1.DataSource = modbusClient.ReadHoldingRegisters(start, licznik);
                 //for (int i = 0; i < licznik; i++)
                 //{
@@ -101,16 +138,71 @@ namespace ModbusForm
             }
             else if (functionBox.SelectedItem == "04 Read Input Registers")
             {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
                 listBox1.DataSource = modbusClient.ReadInputRegisters(start, licznik);
             }
             else
             {
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
                 listBox1.DataSource = modbusClient.ReadHoldingRegisters(start, licznik);
             }
 
-            
+
         }
 
+        //private void CoilOdczyt(int st, int licz, ref ListBox listB1)
+        //private void CoilOdczyt()
+        //{
+        //    start = Int32.Parse(addBox1.Text);
+        //    licznik = Int32.Parse(addBox2.Text);
+
+        //    if (listBox1.InvokeRequired)
+        //    {
+        //        var d = new SafeCallDelegate(CoilOdczyt);
+        //        listBox1.Invoke(d, new object[] {  });
+        //    }
+        //    else
+        //    {
+        //        listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+        //    }
+        //    Thread.Sleep(1000);
+
+        //    //listB1.DataSource = modbusClient.ReadCoils(st, licz);
+        //    //Thread.Sleep(1000);
+
+        //}
+
+        private void CoilOdczyt(object obj)
+        { 
+            CancellationToken token = (CancellationToken)obj;
+            start = Int32.Parse(addBox1.Text);
+            licznik = Int32.Parse(addBox2.Text);
+            while (true)
+            {
+                if (token.IsCancellationRequested) 
+                { 
+                    break; 
+                }
+                else 
+                {
+                    //listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+                    if (listBox1.InvokeRequired)
+                    {
+                        var d = new SafeCallDelegate(CoilOdczyt);
+                        listBox1.Invoke(d, new object[] { obj });
+                    }
+                    else
+                    {
+                        listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+                    }
+                    Thread.Sleep(1000);
+                }
+            }
+        }
         private void buttonDis_Click(object sender, EventArgs e)
         {
             modbusClient.Disconnect();
@@ -289,7 +381,25 @@ namespace ModbusForm
             //}
 
         }
+
+        //private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        //{
+        //    //while (true)
+        //    //{
+        //        start = Int32.Parse(addBox1.Text);
+        //        licznik = Int32.Parse(addBox2.Text);
+        //        listBox1.DataSource = modbusClient.ReadCoils(start, licznik);
+        //        Thread.Sleep(1000);
+        //    //}
+        //}
+
+        //private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    listBox1.Text = e.Result.ToString();
+        //}
     }
+
+
 
     public class ChartData
     {

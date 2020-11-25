@@ -60,6 +60,7 @@
             this.labelStan = new System.Windows.Forms.Label();
             this.buttonCrt = new System.Windows.Forms.Button();
             this.chartD = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.chartD)).BeginInit();
             this.SuspendLayout();
             // 
@@ -334,6 +335,11 @@
             this.chartD.TabIndex = 31;
             this.chartD.Text = "chart1";
             // 
+            // backgroundWorker1
+            // 
+            //this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            //this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -409,6 +415,7 @@
         private System.Windows.Forms.Label labelStan;
         private System.Windows.Forms.Button buttonCrt;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartD;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
